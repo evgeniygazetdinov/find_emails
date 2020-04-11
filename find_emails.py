@@ -13,7 +13,8 @@ def clean_name(name):
 	return None
 
 def find_links():
-	URL = 'https://ratingratingov.ru/web-studios-ratings-ratingratingov-web-2017'
+	#TODO add condtion by check csv file
+	URL = 'https://ratingratingov.ru/web-studios-ratings-ratingratingov-web-2019'
 	USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
 	# mobile user-agent
 	MOBILE_USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
@@ -37,3 +38,7 @@ def find_links():
 
 def find_emails_on_links():
 	pass
+
+
+if __name__ == '__main__':
+	find_links()

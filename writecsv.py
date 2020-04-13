@@ -1,6 +1,8 @@
 import csv
 import os
 
+FILE = "out.csv"
+
 class DictUnicodeWriter(object):
 
     def __init__(self, f, fieldnames, dialect=csv.excel, encoding="utf-8", **kwds):
@@ -33,7 +35,7 @@ class DictUnicodeWriter(object):
 def write_to_csv(info_for_write):
     #notice use OrderedDict for save order
     fields = ['url','studio_name']
-    file = 'out.csv'
+    file = FILE
     with open(file,'a+',encoding='utf-8-sig',newline='') as f:
         csv_dict = [row for row in csv.DictReader(f)]
         w = csv.DictWriter(f,fieldnames=fields)

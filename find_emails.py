@@ -2,8 +2,9 @@ import urllib
 import requests
 from bs4 import BeautifulSoup
 from collections import OrderedDict
-from writecsv import write_to_csv
-
+from writecsv import write_to_csv,FILE
+import numpy as np
+from collections import namedtuple
 
 def clean_name(name):
 	if name is not None:
@@ -11,6 +12,33 @@ def clean_name(name):
 		clean_name = (clean[1]).split('</u>')
 		return clean_name[0]
 	return None
+
+
+def read_links_from_csv():
+	lines = np.genfromtxt(FILE, delimiter=",", dtype=None)
+	my_dict = dict()
+	for i in range(len(lines)):
+	   my_dict[lines[i][0]] = lines[i][1]
+	return my_dict
+
+
+def check_link_on_email(link):
+	pass
+
+
+
+
+
+def check_links(links):
+	emails_with_names = namedtuple()
+	for name_studio,link in links.items():
+		email = check_link_on_email(link)
+		if email is None:
+			continue
+        emails_with_names[name_studio] = email
+	return emails_with_names
+
+
 
 def find_links():
 	#TODO add condtion by check csv file
@@ -37,7 +65,8 @@ def find_links():
 					continue
 
 def find_emails_on_links():
-	pass
+	links = read_links_from_csv()
+	emails = check_links(email)
 
 
 if __name__ == '__main__':

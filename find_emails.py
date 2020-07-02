@@ -10,8 +10,12 @@ import xlwt
 import pandas as pd
 from openpyxl import load_workbook
 import os
-filename  = "emails.xlsx"
+import time
 
+
+
+filename  = "emails.xlsx"
+links_base = 'out.csv'
 
 def create_file():
 	writer = pd.ExcelWriter(filename, engine='xlsxwriter')
@@ -43,8 +47,8 @@ def clean_name(name):
 	return None
 
 
-def read_links_from_csv(file):
-	lines = np.genfromtxt(file, delimiter=",", dtype=None)
+def read_links_from_csv(links_base):
+	lines = np.genfromtxt(links_base, delimiter=",", dtype=None)
 	my_dict = dict()
 	for i in range(len(lines)):
 	   my_dict[lines[i][0]] = lines[i][1]
@@ -54,16 +58,21 @@ def read_links_from_csv(file):
 def emailExtractor(link):
 	getH=requests.get(link)
 	h=getH.content
-	soup=BeautifulSoup(h,'html.parser')
-	mailtos = soup.select('a[href^=mailto]')
-	for i in mailtos:
-		href=i['href']
-		try:
-			str1, str2 = href.split(':')
-		except ValueError:
-			break
-		
-		return str2
+
+	if getH.status_code == 200:
+		soup=BeautifulSoup(h,'html.parser')
+		mailtos = soup.select('a[href^=mailto]')
+		for i in mailtos:
+			href=i['href']
+			try:
+				str1, str2 = href.split(':')
+			except ValueError:
+				break
+			
+			return str2
+	else:
+		return None
+
 
 
 
@@ -82,10 +91,21 @@ def check_link_on_email(link):
 
 def check_links(links):
 	emails_with_names = OrderedDict()
+
 	for studio_address,studio_name in links.items():
-		if not re.match(r'http',studio_address):
-				continue
-		email = check_link_on_email(studio_address)
+		try:
+			if not re.match(r'http',studio_address):
+					continue
+			if studio_address == 'http://www.trilan.ru/':
+					continue
+			email = check_link_on_email(studio_address)
+		except:
+			print("Connection refused by the server..")
+			print("Let me sleep for 5 seconds")
+			print("ZZzzzz...")
+			time.sleep(2)
+			print("Was a nice sleep, now let me continue...")
+			continue
 		emails_with_names[studio_name] = email
 	return emails_with_names
 
@@ -117,11 +137,12 @@ def find_links():
 					continue
 
 def find_emails_on_links():
-	links = read_links_from_csv('out.csv')
+	links = read_links_from_csv(links_base)
 	emails = check_links(links)
 
 
 if __name__ == '__main__':
-    #if out not exists execute find_links	
+	if not os.path.exists(links_base):
+		find_links()
 	find_emails_on_links()
 	

@@ -11,7 +11,7 @@ import pandas as pd
 from openpyxl import load_workbook
 import os
 filename  = "emails.xlsx"
-
+link_base = 'out.csv'
 
 def create_file():
 	writer = pd.ExcelWriter(filename, engine='xlsxwriter')
@@ -52,7 +52,7 @@ def read_links_from_csv(file):
 
 
 def emailExtractor(link):
-	getH=requests.get(link)
+k	getH=requests.get(link)
 	h=getH.content
 	soup=BeautifulSoup(h,'html.parser')
 	mailtos = soup.select('a[href^=mailto]')
@@ -117,11 +117,12 @@ def find_links():
 					continue
 
 def find_emails_on_links():
-	links = read_links_from_csv('out.csv')
+	links = read_links_from_csv()
 	emails = check_links(links)
 
 
 if __name__ == '__main__':
+    if os.path.exists(links_base):
     #if out not exists execute find_links	
 	find_emails_on_links()
 	

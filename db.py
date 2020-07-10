@@ -24,3 +24,16 @@ class Web_studio_db():
                         date_send timestamp)
                     """)
         conn.commit()
+
+
+
+
+    def put_sended_emails_into_db(self):
+        pass
+
+
+    def put_new_webstudio_website(self):
+        pass
+
+    def put_new_emails(self):
+        pass

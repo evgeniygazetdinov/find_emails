@@ -1,5 +1,8 @@
-/__pychache__
+/__pycache__
 /.vscode
-/env
+/venv
 *.pyc
 *.csv
+*.xlsx
+chain.py
+*.db
